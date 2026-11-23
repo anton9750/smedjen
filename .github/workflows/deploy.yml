@@ -25,26 +25,22 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: frontend-smedjeshoppen/package-lock.json
-      - name: Install frontend dependencies
+          cache-dependency-path: package-lock.json
+      - name: Install dependencies
         run: npm ci
-        working-directory: frontend-smedjeshoppen
       - name: Build frontend
         run: npm run build
-        working-directory: frontend-smedjeshoppen
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL }}
-          GITHUB_ACTIONS: true
-          GITHUB_REPOSITORY: ${{ github.repository }}
       - name: Add SPA route fallback
         run: cp dist/index.html dist/404.html
-        working-directory: frontend-smedjeshoppen
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: frontend-smedjeshoppen/dist
+          path: dist
+
   deploy:
     environment:
       name: github-pages
@@ -55,5 +51,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-
